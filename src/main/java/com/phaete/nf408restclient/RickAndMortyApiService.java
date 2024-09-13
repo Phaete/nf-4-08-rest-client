@@ -1,7 +1,6 @@
 package com.phaete.nf408restclient;
 
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestClient;
 
 import java.util.List;

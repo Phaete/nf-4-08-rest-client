@@ -72,6 +72,78 @@ class RickAndMortyCharacterControllerTest {
     }
 
     @Test
-    void getCharacterById() {
+    void getAllCharactersByStatusAlive() throws Exception{
+        mockRestServiceServer.expect(  // Expect a request
+                requestTo("https://rickandmortyapi.com/api/character?status=alive") // to this url
+        ).andExpect( // and expect
+                method(HttpMethod.GET) // a GET request
+        ).andRespond( // and respond
+                withSuccess( // with a successful response, contains everything in RockAndMortyApiResponse
+                        """
+                            {
+                                "info": {
+                                    "count": 32,
+                                    "pages": 42
+                                },
+                                "results": [
+                                    {
+                                        "id": 1,
+                                        "name": "Rick Sanchez",
+                                        "species": "Human"
+                                    }
+                                ]
+                            }
+                        """,
+                        MediaType.APPLICATION_JSON
+                ) // with this body
+        );
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/characters?status=alive"))
+                .andExpect(status().isOk())
+                .andExpect(content().json(
+                        """
+                            [
+                                {
+                                    "id": 1,
+                                    "name": "Rick Sanchez",
+                                    "species": "Human"
+                                }
+                            ]
+                        """
+                ));
     }
+
+    @Test
+    void getCharacterById() throws Exception{
+        mockRestServiceServer.expect( // Expect a request
+                requestTo("https://rickandmortyapi.com/api/character/1") // to this url
+        ).andExpect( // and expect it to be
+                method(HttpMethod.GET) // a get request
+        ).andRespond( // and respond
+                withSuccess( // with a successful response
+                        """
+                            {
+                                "id": 1,
+                                "name": "Rick Sanchez",
+                                "species": "Human"
+                            }
+                        """,
+                        MediaType.APPLICATION_JSON
+                ) // with this body
+        );
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/characters/1"))
+                .andExpect(status().isOk())
+                .andExpect(content().json(
+                    """
+                        {
+                            "id": 1,
+                            "name": "Rick Sanchez",
+                            "species": "Human"
+                        }
+                    """
+                ));
+    }
+
+
 }

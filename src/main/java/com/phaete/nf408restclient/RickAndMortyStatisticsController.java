@@ -10,8 +10,11 @@ import org.springframework.web.client.RestClient;
 @RequestMapping("/api/species-statistic")
 public class RickAndMortyStatisticsController {
 
-    RestClient.Builder restClientBuilder = RestClient.builder();
-    private final RickAndMortyApiService rickAndMortyApiService = new RickAndMortyApiService(restClientBuilder);
+    private final RickAndMortyApiService rickAndMortyApiService;
+
+    public RickAndMortyStatisticsController(RickAndMortyApiService rickAndMortyApiService) {
+        this.rickAndMortyApiService = rickAndMortyApiService;
+    }
 
     @GetMapping
     public int getSpeciesStatistic(@RequestParam String species) {
