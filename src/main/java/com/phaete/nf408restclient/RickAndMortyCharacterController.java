@@ -9,12 +9,15 @@ import java.util.List;
 @RequestMapping("/api/characters")
 public class RickAndMortyCharacterController {
 
-    RestClient.Builder restClientBuilder = RestClient.builder();
-    private final RickAndMortyApiService rickAndMortyApiService = new RickAndMortyApiService(restClientBuilder);
+    private final RickAndMortyApiService rickAndMortyApiService;
+
+    public RickAndMortyCharacterController(RickAndMortyApiService rickAndMortyApiService) {
+        this.rickAndMortyApiService = rickAndMortyApiService;
+    }
 
     @GetMapping
     public List<RickAndMortyApiResponseResults> getAllCharacters(@RequestParam(required = false) String status) {
-        if (status.isBlank()) {
+        if (status == null) {
             return rickAndMortyApiService.getAllCharacters();
         } else {
             return rickAndMortyApiService.getCharactersByStatus(status);
